@@ -82,7 +82,7 @@ with open(filename, 'rt') as file:
                 print('Line %d, Input %s' % (line, command_input), end=':')
                 print('Func %s not Found in Rtypes!' % Func)
                 raise NameError
-            strlist = [inverse_Func[Func], Rs, Rt, Rd, Shamt]
+            strlist = [inverse_Func[Func], Rs, Rt, Rd]
         elif operate in data['R']:
             Rs = command[6:11]
             Rt = command[11:16]
@@ -97,6 +97,13 @@ with open(filename, 'rt') as file:
             Rt = command[11:16]
             ImmAddr16 = command[16:]
             Rs, Rt = 'R' + Bin2Int(Rs), 'R' + Bin2Int(Rt)
+            ### TODO ### ############# ADD OR IMM #############
+            # if operate in ['ADDI', 'SUBI', 'SLTI']:
+            #     sign = 1 if ImmAddr16[0] == '0' else -1
+            #     ImmAddr16 = sign * Bin2Int(ImmAddr16[1:])
+            # else:
+            #    ImmAddr16 = Bin2Int(ImmAddr16)
+            ###################################################
             ImmAddr16 = Bin2Int(ImmAddr16)
             strlist = [operate, Rs, Rt, ImmAddr16]
         elif operate in data['J']:
@@ -105,6 +112,15 @@ with open(filename, 'rt') as file:
             strlist = [operate, Addr26]
         else:
             print("Opcode not available!")
+        if strlist[0] in data['Rtype']:  # Swapping string segments to get he desired hex code
+            # RS1, RS2, Destination = RS2, Destination, RS1
+            strlist[1], strlist[2], strlist[3] = strlist[3], strlist[1], strlist[2]
+        elif strlist[0] in ['ADDI', 'SUBI', 'SLTI']:
+            # RS1, RS2 = RS2, RS1
+            strlist[1], strlist[2] = strlist[2], strlist[1]
+        elif strlist[0] in ['LW', 'SW']:
+            # RS1, RS2, Destination = Destination, RS1, RS2
+            strlist[1], strlist[2], strlist[3] = strlist[2], strlist[3], strlist[1]
         output = ' '.join(strlist)
         outs.append(output)
     print()
