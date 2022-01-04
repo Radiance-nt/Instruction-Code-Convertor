@@ -35,16 +35,23 @@ outs = []
 with open('./opcode.json') as f:
     data = json.load(f)  # Reading the Json file
     new_data = {}
-    for v in data.values():
-        new_data.update(v)
     inverse = {}
-    for key, value in new_data.items():
-        if value in inverse:
-            raise NameError
-        inverse[value] = key
+    inverse_Func = {}
+    for key, value in data.items():
+        if key != 'Rtype':
+            new_data.update(value)
+            for k, v in value.items():
+                if v in inverse:
+                    raise NameError
+                inverse[v] = k
+        else:
+            for k, v in value.items():
+                if v in inverse_Func:
+                    raise NameError
+                inverse_Func[v] = k
 
 with open(filename, 'rt') as file:
-    for command_input in file:  # This loop will go on forever
+    for line, command_input in enumerate(file):  # This loop will go on forever
         command_input = command_input.rstrip('\n')
         print(command_input)
         if 'h' in command_input:
@@ -63,7 +70,20 @@ with open(filename, 'rt') as file:
         opcode = command[:6]
         operate = inverse[opcode]
         output = []
-        if operate in data['R']:
+        if operate == 'Rtype':
+            Rs = command[6:11]
+            Rt = command[11:16]
+            Rd = command[16:21]
+            Shamt = command[21:26]
+            Func = command[26:]
+            Rs, Rt, Rd = 'R' + Bin2Int(Rs), 'R' + Bin2Int(Rt), 'R' + Bin2Int(Rd)
+            Shamt = Bin2Int(Shamt)
+            if Func not in inverse_Func:
+                print('Line %d, Input %s' % (line, command_input), end=':')
+                print('Func %s not Found in Rtypes!' % Func)
+                raise NameError
+            strlist = [inverse_Func[Func], Rs, Rt, Rd, Shamt]
+        elif operate in data['R']:
             Rs = command[6:11]
             Rt = command[11:16]
             Rd = command[16:21]

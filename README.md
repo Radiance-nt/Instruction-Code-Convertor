@@ -19,13 +19,15 @@ Results:
     ADD R1 R2 R3
     LW R3 0
     
-    00000000010000110000100000000000
-    00100000011000000000000000001011
+    00000000010000110000100000010011
+    10001100011000000000000000001011
     
-    00430800
-    2060000b
+    00430813
+    8c60000b
 
 ## Codes Convert to Instructions
+
+> Can read **Binary** and **Hexadecimal** code.
 
 Run
 
@@ -37,40 +39,45 @@ An Example:
 
 Results:
 
-    00000000010000110000100000000000
-    00100000011000000000000000001011
-    00430800
-    2060000b
+    00000000010000110000100000010011
+    10001100011000000000000000001011
+    00430813
+    8c60000b
     
-    ADD R2 R3 R1 0 000000
+    ADD R2 R3 R1 0
     LW R3 R0 11
-    ADD R2 R3 R1 0 000000
+    ADD R2 R3 R1 0
     LW R3 R0 11
 
 ## Design your code format
 
 You can also add other instructions to the json file
 
+> Many Rtype commands started with a special opcode '000000', the numbers in json refer to their Func codes.
+
     {
       "I": {
-        "LW": "001000",
-        "SW": "001001",
+        "LW": "100011",
+        "SW": "101011",
         "BNEQZ": "001101",
-        "BEQZ": "001110"
+        "BEQ": "000100"
       },
       "R": {
-        "ADD": "000000",
-        "SUB": "000001",
-        "AND": "000010",
-        "OR": "000011",
-        "SLT": "000100",
-        "MUL": "000101",
-        "ADDI": "001010",
+        "Rtype": "000000", // Do not delete this line, otherwise Rtype commands will be unavailable
+        "ADDI": "001000",
         "SUBI": "001011",
         "SLT1": "001100"
       },
       "J": {
         "HLT": "111111",
-        "J": "111110"
+        "J": "000010"
+      },
+      "Rtype": {
+        "ADD": "010011",
+        "SUB": "000001",
+        "AND": "111010",
+        "OR": "000011",
+        "SLT": "010100",
+        "MUL": "000101"
       }
     }

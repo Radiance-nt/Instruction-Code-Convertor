@@ -26,7 +26,7 @@ with open('./opcode.json') as f:
 with open(filename, 'rt') as file:
     for command_input in file:
         command_input = command_input.rstrip('\n')
-        if command_input=='':
+        if command_input == '':
             continue
         print(command_input)
         result_binary = '0'
@@ -50,8 +50,10 @@ with open(filename, 'rt') as file:
         else:
             type_of_opcode = -1
 
-        if opcode in ['ADD', 'SUB', 'AND', 'OR', 'SLT', 'MUL']:  # Swapping string segments to get he desired hex code
+        if opcode in data['Rtype']:  # Swapping string segments to get he desired hex code
             RS1, RS2, Destination = RS2, Destination, RS1
+            Func = data['Rtype'][opcode]
+            opcode = 'Rtype'
         elif opcode in ['ADDI', 'SUBI', 'SLTI']:  # Swapping string segments to get he desired hex code
             RS1, RS2 = RS2, RS1
         elif opcode in ['LW', 'SW']:  # Swapping string segments to get he desired hex code
@@ -98,6 +100,9 @@ with open(filename, 'rt') as file:
         elif type_of_opcode == 0:
             Destination = bin(int(Destination, 16))[2:]
             result_binary = result_binary[:6] + result_binary[6:32 - len(Destination)] + Destination
+
+        if opcode == 'Rtype':
+            result_binary = result_binary[:26] + Func
 
         result_hex = hex(int(result_binary, 2))
         result_hex = result_hex[2:]
