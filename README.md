@@ -138,15 +138,15 @@ You can also add other instructions to the json file
     {
       "I": {
         "ADDI": "001000",
+        "SUBI": "001011",
+        "SLT1": "001100",
         "LW": "100011",
         "SW": "101011",
         "BNEQZ": "001101",
         "BEQ": "000100"
       },
       "R": {
-        "Rtype": "000000", // Do not delete this line, otherwise Rtype commands will be unavailable
-        "SUBI": "001011",
-        "SLT1": "001100"
+        "Rtype": "000000" // Do not delete this line, otherwise Rtype commands will be unavailable
       },
       "J": {
         "HLT": "111111",
