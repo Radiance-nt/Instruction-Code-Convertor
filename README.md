@@ -72,7 +72,7 @@ You can also add other instructions to the json file
         "HLT": "111111",
         "J": "000010"
       },
-      "Rtype": {
+      "Rtype": { // Numbers below refer to Func codes in Rtype command
         "ADD": "010011",
         "SUB": "000001",
         "AND": "111010",
