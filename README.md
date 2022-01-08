@@ -135,6 +135,7 @@ You can also add other instructions to the json file
 
 > Many Rtype commands started with a special opcode '000000', the numbers in json refer to their Func codes.
 
+    // These can be different without repeating.
     {
       "I": {
         "ADDI": "001000",
@@ -161,3 +162,50 @@ You can also add other instructions to the json file
         "MUL": "000101"
       }
     }
+
+## 9-dimensional Matrix ADD Operation
+### Instructions
+The instructions are in [matrix_add.txt](matrix_add.txt)
+
+    ADDI R19 R0 9   // D = 9 dimension
+    ADDI R20 R0 0   // Init index i = 0
+    ADD R21 R20 R19 // Init index j = i + D
+    LW R1 0 R20     // Read Mem(i)
+    LW R10 0 R21    // Read Mem(j)
+    ADD R1 R1 R10   // Add Mem(i) and Mem(j)
+    SW R1 0 R20     // Write the result back to Mem(i)
+    ADDI R20 R20 1  // i = i + 1
+    BEQ R19 R20 1*   // if i == D  pc = (pc + 1)+ 1*  
+    J 2             // Go back to line 3
+    LW R31 0 R0     // Read the matrix elements...
+    LW R31 1 R0
+    LW R31 2 R0
+    LW R31 3 R0
+    LW R31 4 R0
+    LW R31 5 R0
+    LW R31 6 R0
+    LW R31 7 R0
+    LW R31 8 R0
+
+### Machine codes for MIPS
+Codes are in [matrix_add_code.txt](matrix_add_code.txt)
+
+    20130009
+    20140000
+    0293a820
+    8e810000
+    8eaa0000
+    002a0820
+    ae810000
+    22940001
+    12740001
+    08000002
+    8c1f0000
+    8c1f0001
+    8c1f0002
+    8c1f0003
+    8c1f0004
+    8c1f0005
+    8c1f0006
+    8c1f0007
+    8c1f0008
